@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class UserService {
   private userUrl: string;
   constructor(private http: HttpClient) {
-    this.userUrl = 'http://localhost:8081/utilisateur';
+    this.userUrl = 'https://tranquil-sea-49327.herokuapp.com/utilisateur';
   }
   public findAll(): Observable<User[]> {
     return this.http.get<User[]>(this.userUrl + 's');

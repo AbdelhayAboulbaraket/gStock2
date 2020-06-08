@@ -13,7 +13,10 @@ export class AuthentificationService {
       Authorization: 'Basic ' + btoa(username + ':' + password),
     });
     return this.httpClient
-      .get<User>('http://localhost:8081/utilisateur/' + username, { headers })
+      .get<User>(
+        'https://tranquil-sea-49327.herokuapp.com/utilisateur/' + username,
+        { headers }
+      )
       .pipe(
         map((userData) => {
           sessionStorage.setItem('username', username);

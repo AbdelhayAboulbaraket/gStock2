@@ -10,8 +10,8 @@ export class UnitService {
   private unitUrl: string;
   private unitUrl2: string;
   constructor(private http: HttpClient) {
-    this.unitUrl = 'http://localhost:8081/unitesDeMesure';
-    this.unitUrl2 = 'http://localhost:8081/uniteDeMesure';
+    this.unitUrl = 'https://tranquil-sea-49327.herokuapp.com/unitesDeMesure';
+    this.unitUrl2 = 'https://tranquil-sea-49327.herokuapp.com/uniteDeMesure';
   }
   public findAll(): Observable<Unit[]> {
     let username = 'admin';

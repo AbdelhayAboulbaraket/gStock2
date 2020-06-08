@@ -10,7 +10,7 @@ import { Stock } from 'src/app/stock/model/stock';
 export class WarehouseService {
   private warehouseUrl: string;
   constructor(private http: HttpClient) {
-    this.warehouseUrl = 'http://localhost:8081/emplacement';
+    this.warehouseUrl = 'https://tranquil-sea-49327.herokuapp.com/emplacement';
   }
   public findAll(): Observable<Warehouse[]> {
     return this.http.get<Warehouse[]>(this.warehouseUrl + 's');
