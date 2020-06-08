@@ -1,0 +1,88 @@
+<app-header></app-header>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <div class="borderBottom">
+    <div class="container">
+      <mat-grid-list cols="2" rowHeight="16:1">
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <h3>Produits / <span id="New">Nouveau</span></h3>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile> </mat-grid-tile>
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <button
+              mat-button
+              class="blueButton"
+              type="submit"
+              [disabled]="!productForm.valid"
+            >
+              Ajouter
+            </button>
+            <button mat-button class="importer" routerLink="/products">
+              Annuler
+            </button>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+
+  <div class="container content">
+    <mat-grid-list cols="2" rowHeight="10:1">
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Nom produit</mat-label>
+          <input matInput type="text" formControlName="nom" />
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile rowspan="2"> </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Type</mat-label>
+          <mat-select disableRipple formControlName="type">
+            <mat-option value="Service">Service</mat-option>
+            <mat-option value="Consommable">Consommable</mat-option>
+            <mat-option value="Article stockable">Article stockable</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Regle de réapprovisionnement</mat-label>
+          <input matInput type="text" formControlName="quantiteMin" />
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile
+        ><mat-form-field class="formField">
+          <mat-label>Catégorie</mat-label>
+          <mat-select disableRipple formControlName="categorie">
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category.designation }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field></mat-grid-tile
+      >
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Unite de mesure</mat-label>
+          <mat-select disableRipple formControlName="uniteDeMesure">
+            <mat-option *ngFor="let unit of units" [value]="unit">
+              {{ unit.designation }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="2">
+        <mat-form-field id="description">
+          <mat-label>Description</mat-label>
+          <textarea matInput></textarea>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</form>

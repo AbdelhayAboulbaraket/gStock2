@@ -1,0 +1,74 @@
+<app-header></app-header>
+<div class="borderBottom">
+  <div class="container">
+    <mat-grid-list cols="2" rowHeight="16:1">
+      <mat-grid-tile>
+        <div fxFlex fxLayoutAlign="start center"><h3>Catégories</h3></div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field>
+          <mat-label>Filtre</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" />
+          <span class="material-icons" mat-button matSuffix mat-icon-button>
+            search
+          </span>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div fxFlex fxLayoutAlign="start center">
+          <button mat-button class="blueButton" routerLink="/categoryForm">
+            CREER
+          </button>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>
+
+<div class="container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="designation">
+      <th mat-header-cell *matHeaderCellDef>Designation</th>
+      <td mat-cell *matCellDef="let element">{{ element.designation }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteCategory(element.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="goToCategoryItem(element.id)"
+        >
+          <mat-icon>update</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>

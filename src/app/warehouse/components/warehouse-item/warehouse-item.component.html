@@ -1,0 +1,49 @@
+<app-header></app-header>
+<form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()">
+  <div class="borderBottom">
+    <div class="container">
+      <mat-grid-list cols="2" rowHeight="16:1">
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <h3>Emplacements / <span id="New">Modifier</span></h3>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile> </mat-grid-tile>
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <button
+              mat-button
+              class="blueButton"
+              type="submit"
+              [disabled]="!warehouseForm.valid"
+            >
+              Modifier
+            </button>
+
+            <button mat-button class="importer" routerLink="/warehouses">
+              Annuler
+            </button>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+
+  <div class="container content">
+    <mat-grid-list cols="2" rowHeight="10:1">
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Nom de l'emplacement</mat-label>
+          <input matInput type="text" formControlName="designation" />
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Adresse</mat-label>
+          <input matInput type="text" formControlName="adresse" />
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</form>

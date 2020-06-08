@@ -1,0 +1,61 @@
+<app-header></app-header>
+<form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+  <div class="borderBottom">
+    <div class="container">
+      <mat-grid-list cols="2" rowHeight="16:1">
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <h3>Stocks / <span id="New">Nouveau</span></h3>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile> </mat-grid-tile>
+        <mat-grid-tile>
+          <div fxFlex fxLayoutAlign="start center">
+            <button
+              mat-button
+              class="blueButton"
+              type="submit"
+              [disabled]="!stockForm.valid"
+            >
+              AJOUTER
+            </button>
+            <button mat-button class="importer" routerLink="/stocks">
+              ANNULER
+            </button>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+
+  <div class="container content">
+    <mat-grid-list cols="2" rowHeight="10:1">
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Entrepot</mat-label>
+          <mat-select disableRipple formControlName="emplacement">
+            <mat-option
+              *ngFor="let warehouse of warehouses"
+              [value]="warehouse"
+            >
+              {{ warehouse.designation }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Telephone du stock</mat-label>
+          <input matInput type="text" formControlName="telephone" />
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="formField">
+          <mat-label>Fax</mat-label>
+          <input matInput type="text" formControlName="fax" />
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</form>
