@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/internal/Observable';
 export class CategoryService {
   private categoryUrl: string;
   constructor(private http: HttpClient) {
-    this.categoryUrl = 'https://tranquil-sea-49327.herokuapp.com/categorie';
+    this.categoryUrl = 'http://localhost:8081/categorie';
   }
   public findAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.categoryUrl + 's');

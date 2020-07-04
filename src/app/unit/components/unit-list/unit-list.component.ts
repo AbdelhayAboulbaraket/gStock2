@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Unit } from '../../model/unit';
 import { UnitService } from '../../service/unit.service';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-unit-list',
@@ -11,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./unit-list.component.css'],
 })
 export class UnitListComponent implements OnInit {
+  role: string;
   units: Unit[];
 
   applyFilter(event: Event) {
@@ -20,7 +23,14 @@ export class UnitListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'designation', 'description', 'actions'];
   dataSource = new MatTableDataSource<Unit>(this.units);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  constructor(private unitService: UnitService, private route: Router) {}
+
+  constructor(
+    private unitService: UnitService,
+    private route: Router,
+    public dialog: MatDialog
+  ) {
+    this.role = sessionStorage.getItem('role');
+  }
   deleteUnit(id: string) {
     this.unitService.delete(id).subscribe(
       (data) => {
@@ -53,5 +63,33 @@ export class UnitListComponent implements OnInit {
   }
   goToUnitItem(code: string) {
     this.route.navigate(['/unit/' + code]);
+  }
+
+  isUser() {
+    if (this.role === 'User') {
+      return true;
+    }
+    return false;
+  }
+  isAdmin() {
+    if (this.role === 'Admin') {
+      return true;
+    }
+    return false;
+  }
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: "Voulez vous supprimer l'unité de mesure " + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteUnit(result.data.codeSupp);
+      }
+    });
   }
 }

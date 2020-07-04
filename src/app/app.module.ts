@@ -16,6 +16,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthHtppInterceptorService } from './authentification/services/basic-auth-htpp-interceptor.service';
 import { StockModule } from './stock/stock.module';
 import { MouvementModule } from './mouvement/mouvement.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,6 +34,7 @@ import { MouvementModule } from './mouvement/mouvement.module';
     AuthentificationModule,
     StockModule,
     MouvementModule,
+    InventoryModule,
   ],
   providers: [
     {
@@ -41,5 +44,6 @@ import { MouvementModule } from './mouvement/mouvement.module';
     },
   ],
   bootstrap: [AppComponent],
+  entryComponents: [ConfirmationDialogComponent],
 })
 export class AppModule {}

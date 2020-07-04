@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Product } from '../../model/product';
 import { ProductService } from '../../service/product.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-product-list',
@@ -29,7 +31,10 @@ export class ProductListComponent implements OnInit {
   dataSource = new MatTableDataSource<Product>(this.produits);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    public dialog: MatDialog
+  ) {}
 
   deleteProduct(id: string) {
     this.productService.delete(id).subscribe(
@@ -52,6 +57,7 @@ export class ProductListComponent implements OnInit {
     this.productService.findAll().subscribe(
       (data) => {
         this.produits = data;
+        console.log(this.produits);
         this.dataSource = new MatTableDataSource<Product>(this.produits);
       },
       (error) => {
@@ -59,5 +65,20 @@ export class ProductListComponent implements OnInit {
         this.dataSource = new MatTableDataSource<Product>(null);
       }
     );
+  }
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Voulez vous supprimer le produit ' + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteProduct(result.data.codeSupp);
+      }
+    });
   }
 }

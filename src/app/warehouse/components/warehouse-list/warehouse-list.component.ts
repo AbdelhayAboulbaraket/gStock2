@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { WarehouseService } from '../../service/warehouse.service';
 import { Warehouse } from '../../model/warehouse';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-warehouse-list',
@@ -11,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./warehouse-list.component.css'],
 })
 export class WarehouseListComponent implements OnInit {
+  role: string;
   warehouses: Warehouse[];
 
   applyFilter(event: Event) {
@@ -23,8 +26,12 @@ export class WarehouseListComponent implements OnInit {
 
   constructor(
     private warehouseService: WarehouseService,
-    private route: Router
-  ) {}
+    private route: Router,
+    public dialog: MatDialog
+  ) {
+    this.role = sessionStorage.getItem('role');
+  }
+
   deleteWarehouse(id: string) {
     this.warehouseService.delete(id).subscribe(
       (data) => {
@@ -62,5 +69,34 @@ export class WarehouseListComponent implements OnInit {
   }
   goToStockForm(code: string) {
     this.route.navigate(['/warehouse/' + code + '/stockForm']);
+  }
+
+  isUser() {
+    if (this.role === 'User') {
+      return true;
+    }
+    return false;
+  }
+  isAdmin() {
+    if (this.role === 'Admin') {
+      return true;
+    }
+    return false;
+  }
+
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: "Voulez vous supprimer l'entrepot " + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteWarehouse(result.data.codeSupp);
+      }
+    });
   }
 }

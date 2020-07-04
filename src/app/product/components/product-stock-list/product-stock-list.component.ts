@@ -3,7 +3,12 @@ import { Product } from '../../model/product';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductService } from '../../service/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, Route } from '@angular/router';
+import { Inventory } from 'src/app/inventory/model/inventory';
+import { InventoryService } from 'src/app/inventory/service/inventory.service';
+import { StockService } from 'src/app/stock/service/stock.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-product-stock-list',
@@ -12,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductStockListComponent implements OnInit {
   produits: Product[];
+  inventory: Inventory;
   codeId: string;
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -26,8 +32,8 @@ export class ProductStockListComponent implements OnInit {
     'prixAchat',
     'fournisseur',
     'quantiteEnStock',
+    'quantiteMin',
     'uniteDeMesure',
-    'description',
     'actions',
   ];
   dataSource = new MatTableDataSource<Product>(this.produits);
@@ -35,7 +41,11 @@ export class ProductStockListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private stockService: StockService,
+    private inventoryService: InventoryService,
+    public dialog: MatDialog
   ) {}
 
   deleteProduct(id: string) {
@@ -70,10 +80,41 @@ export class ProductStockListComponent implements OnInit {
     );
   }
   enRupture(produit: Product) {
-    console.log(produit.quantiteMin + ':' + produit.quantiteEnStock);
     if (produit.quantiteMin > produit.quantiteEnStock) {
       return true;
     }
     return false;
+  }
+
+  FaireInventaire() {
+    this.inventory = new Inventory();
+    this.stockService.findStock(this.codeId).subscribe(
+      (data) => {
+        this.inventory.stock = data[0];
+      },
+      (error) => console.log(error)
+    );
+    console.log(this.inventory.stock);
+    this.inventoryService
+      .save(this.inventory)
+      .subscribe((result) => console.log('Inventaire crée.'));
+  }
+  goToInventories() {
+    this.router.navigate(['/stock/' + this.codeId + '/inventories']);
+  }
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Voulez vous supprimer le produit  ' + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteProduct(result.data.codeSupp);
+      }
+    });
   }
 }

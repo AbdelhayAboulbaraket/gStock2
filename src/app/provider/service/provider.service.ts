@@ -9,7 +9,7 @@ import { Provider } from '../model/provider';
 export class ProviderService {
   private providerUrl: string;
   constructor(private http: HttpClient) {
-    this.providerUrl = 'https://tranquil-sea-49327.herokuapp.com/fournisseur';
+    this.providerUrl = 'http://localhost:8081/fournisseur';
   }
   public findAll(): Observable<Provider[]> {
     let username = 'admin';

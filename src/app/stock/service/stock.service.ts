@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class StockService {
   private stockUrl: string;
   constructor(private http: HttpClient) {
-    this.stockUrl = 'https://tranquil-sea-49327.herokuapp.com/stock';
+    this.stockUrl = 'http://localhost:8081/stock';
   }
   public findAll(): Observable<Stock[]> {
     return this.http.get<Stock[]>(this.stockUrl + 's');

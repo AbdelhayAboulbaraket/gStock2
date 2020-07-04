@@ -19,10 +19,12 @@
           Fournisseurs
         </button>
         <button mat-menu-item routerLink="/warehouses">Emplacements</button>
-        <button mat-menu-item routerLink="/users">Employés</button>
+        <button *ngIf="isAdmin()" mat-menu-item routerLink="/users">
+          Employés
+        </button>
       </mat-menu>
 
-      <button mat-button [matMenuTriggerFor]="rapports">
+      <button *ngIf="isUser()" mat-button [matMenuTriggerFor]="rapports">
         Rapports
       </button>
       <mat-menu #rapports="matMenu">
@@ -38,23 +40,13 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
       <ul fxLayout="row" fxLayoutGap="20px">
         <li>
-          <button mat-icon-button>
-            <mat-icon>settings</mat-icon>
-          </button>
-        </li>
-        <li>
-          <button mat-icon-button>
-            <mat-icon>help_outline</mat-icon>
-          </button>
-        </li>
-        <li>
           <button mat-button [matMenuTriggerFor]="signOut">
             <mat-icon>person_outline</mat-icon>
           </button>
           <mat-menu #signOut="matMenu">
             <button mat-menu-item (click)="logOut()">
               <mat-icon>exit_to_app</mat-icon>
-              Sign out
+              Se déconnecter
             </button>
           </mat-menu>
         </li>

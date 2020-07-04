@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ProviderService } from '../../service/provider.service';
 import { Provider } from '../../model/provider';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-provider-list',
@@ -11,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./provider-list.component.css'],
 })
 export class ProviderListComponent implements OnInit {
+  role: string;
   providers: Provider[];
 
   applyFilter(event: Event) {
@@ -28,8 +31,11 @@ export class ProviderListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   constructor(
     private providerService: ProviderService,
-    private route: Router
-  ) {}
+    private route: Router,
+    public dialog: MatDialog
+  ) {
+    this.role = sessionStorage.getItem('role');
+  }
   deleteProvider(id: string) {
     this.providerService.delete(id).subscribe(
       (data) => {
@@ -62,5 +68,34 @@ export class ProviderListComponent implements OnInit {
   }
   goToProviderItem(code: string) {
     this.route.navigate(['/provider/' + code]);
+  }
+
+  isUser() {
+    if (this.role === 'User') {
+      return true;
+    }
+    return false;
+  }
+  isAdmin() {
+    if (this.role === 'Admin') {
+      return true;
+    }
+    return false;
+  }
+
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Voulez vous supprimer le fournisseur ' + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteProvider(result.data.codeSupp);
+      }
+    });
   }
 }

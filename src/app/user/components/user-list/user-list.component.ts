@@ -4,6 +4,8 @@ import { User } from '../../model/user';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-list',
@@ -31,7 +33,11 @@ export class UserListComponent implements OnInit {
     'actions',
   ];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  constructor(private userService: UserService, private route: Router) {}
+  constructor(
+    private userService: UserService,
+    private route: Router,
+    public dialog: MatDialog
+  ) {}
 
   deleteAgent(id: number) {
     this.userService.delete(id).subscribe(
@@ -67,5 +73,21 @@ export class UserListComponent implements OnInit {
   }
   goToUserItem(code: string) {
     this.route.navigate(['/user/' + code]);
+  }
+
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: "Voulez vous supprimer l'utlisateur " + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteAgent(result.data.codeSupp);
+      }
+    });
   }
 }

@@ -9,7 +9,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 export class ProductService {
   private productUrl: string;
   constructor(private http: HttpClient) {
-    this.productUrl = 'https://tranquil-sea-49327.herokuapp.com/produit';
+    this.productUrl = 'http://localhost:8081/produit';
   }
   public findAll(): Observable<Product[]> {
     let username = 'admin';
@@ -28,7 +28,7 @@ export class ProductService {
     });
 
     return this.http.get<Product[]>(
-      'https://tranquil-sea-49327.herokuapp.com/stock/' + id + '/produits'
+      'http://localhost:8081/stock/' + id + '/produits'
     );
   }
   public findProduct(code: string): Observable<Product[]> {

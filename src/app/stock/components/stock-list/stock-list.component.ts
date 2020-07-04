@@ -4,6 +4,8 @@ import { Stock } from '../../model/stock';
 import { StockService } from '../../service/stock.service';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-stock-list',
@@ -26,7 +28,11 @@ export class StockListComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<Stock>(this.stocks);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  constructor(private stockService: StockService, private route: Router) {}
+  constructor(
+    private stockService: StockService,
+    private route: Router,
+    public dialog: MatDialog
+  ) {}
   deleteStock(id: number) {
     console.log(id);
     this.stockService.delete(id).subscribe(
@@ -59,5 +65,21 @@ export class StockListComponent implements OnInit {
   }
   goToProducts(code: string) {
     this.route.navigate(['/stock/' + code + '/products']);
+  }
+
+  openDialog(code: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Voulez vous supprimer le stock ' + code + '?',
+        codeSupp: code,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteStock(result.data.codeSupp);
+      }
+    });
   }
 }

@@ -79,6 +79,7 @@ export class ProductFormComponent implements OnInit {
   }
   onSubmit() {
     this.product = this.productForm.value;
+    console.log(this.product);
     this.productService
       .save(this.product)
       .subscribe((result) => this.gotoProductList());
